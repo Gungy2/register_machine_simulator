@@ -20,14 +20,16 @@ class RegisterMachine(private var label: Int = 0, val state: MutableMap<Int, Int
         val next: Int
         when (command) {
             is IncreaseCommand -> {
-                state[command.register] = (state[command.register] ?: 0) + 1
+                val oldValue = state.getOrPut(command.register) { 0 }
+                state[command.register] = oldValue + 1
                 next = command.label
             }
             is DecreaseCommand -> {
-                next = if (state[command.register] == null || state[command.register] == 0) {
+                val oldValue = state.getOrPut(command.register) { 0 }
+                next = if (oldValue == 0) {
                     command.labelZero
                 } else {
-                    state[command.register] = (state[command.register] ?: 0) - 1
+                    state[command.register] = oldValue - 1
                     command.labelPositive
                 }
             }
@@ -38,7 +40,7 @@ class RegisterMachine(private var label: Int = 0, val state: MutableMap<Int, Int
 
     private fun printState() {
         print("Next: L$label\tState:  ")
-        state.forEach { (reg, value) -> print("R$reg = $value  ") }
+        state.forEach { (ind, value) -> print("R$ind = $value  ") }
         println()
     }
 }

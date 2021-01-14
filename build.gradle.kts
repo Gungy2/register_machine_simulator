@@ -13,4 +13,5 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.antlr:antlr4:4.9")
+    implementation("com.github.ajalt.clikt:clikt:3.1.0")
 }
